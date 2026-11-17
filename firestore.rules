@@ -1,0 +1,61 @@
+rules_version = '2';
+// Central system: students own their results; teachers read/grade results of students in their classes.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function role() { return request.auth.token.role; }
+    function isTeacher() { return signedIn() && (role() == 'teacher' || role() == 'admin'); }
+    function isAdmin() { return signedIn() && role() == 'admin'; }
+    function unchanged(keys) { return !request.resource.data.diff(resource.data).affectedKeys().hasAny(keys); }
+
+    // Profiles: own doc only. Role / class membership can only be changed by Cloud Functions.
+    match /users/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isTeacher());
+      allow create: if signedIn() && request.auth.uid == uid && request.resource.data.role == 'student';
+      allow update: if signedIn() && request.auth.uid == uid && unchanged(['role', 'classIds', 'teacherIds', 'classNames']);
+    }
+
+    // Exam results
+    match /results/{rid} {
+      allow create: if signedIn() && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.pending is bool && !('gradedBy' in request.resource.data);
+      allow read: if signedIn() && (resource.data.uid == request.auth.uid
+                    || request.auth.uid in resource.data.teacherIds || isAdmin());
+      // Teachers may only set the essay grade fields.
+      allow update: if isTeacher() && (request.auth.uid in resource.data.teacherIds || isAdmin())
+                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['sections', 'total', 'pending', 'comment', 'gradedBy', 'gradedAtMs']);
+    }
+
+    // Classes
+    match /classes/{cid} {
+      allow create: if isTeacher() && request.resource.data.teacherId == request.auth.uid;
+      allow read: if signedIn() && (resource.data.teacherId == request.auth.uid || isAdmin()
+                    || exists(/databases/$(database)/documents/classes/$(cid)/members/$(request.auth.uid)));
+      allow update, delete: if isTeacher() && resource.data.teacherId == request.auth.uid;
+      match /members/{uid} {
+        allow read: if signedIn() && (request.auth.uid == uid || get(/databases/$(database)/documents/classes/$(cid)).data.teacherId == request.auth.uid);
+        allow write: if false; // Cloud Function joinClass only
+      }
+    }
+    match /joinCodes/{code} {
+      allow create: if isTeacher() && request.resource.data.teacherId == request.auth.uid;
+      allow read, update, delete: if false;
+    }
+
+    // Extra exam sets added by teachers (same JSON shape as assets/data/hsk5.json)
+    match /exams/{eid} {
+      allow read: if signedIn();
+      allow write: if isTeacher();
+    }
+
+    match /surveys/{sid} {
+      allow create: if signedIn();
+      allow read: if isTeacher();
+    }
+
+    // Server-only collections
+    match /resetCodes/{d} { allow read, write: if false; }
+    match /teacherCodes/{d} { allow read, write: if isAdmin(); }
+    match /vocabI18n/{d} { allow read: if signedIn(); allow write: if false; }
+  }
+}
