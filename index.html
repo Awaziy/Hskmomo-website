@@ -3,280 +3,396 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Momo · บัญชีผู้ใช้</title>
+<meta name="theme-color" content="#D9534F">
+<title>HSK Momo · เข้าสู่ระบบ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@700;800&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <style>
-  :root {
-    --red: #D9534F; --red-d: #C2413D; --red-soft: #FCEBEA;
-    --bg: #F4F5F8; --card: #FFFFFF; --ink: #1E2330; --sub: #5D6474; --muted: #8E95A4; --line: #E6E8EE;
-    --green: #2E8B57; --green-soft: #E5F4EA; --blue-soft: #E8EFFD;
-    --shadow: 0 1px 2px rgba(30,35,48,.05), 0 12px 32px rgba(30,35,48,.08);
-    --font: "Noto Sans Thai", system-ui, -apple-system, "Segoe UI", sans-serif;
-  }
-  * { box-sizing: border-box; }
-  [hidden] { display: none !important; }
-  html, body { margin: 0; min-height: 100%; }
-  body {
-    font: 15px/1.55 var(--font); color: var(--ink); background: var(--bg);
-    min-height: 100svh; display: flex; align-items: center; justify-content: center;
-    padding: max(24px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
-  }
-  body::before {
-    content: ""; position: fixed; inset: 0 0 auto 0; height: 46svh; z-index: -1;
-    background: linear-gradient(160deg, var(--red) 0%, var(--red-d) 100%);
-    border-radius: 0 0 36px 36px;
-  }
-  button, input { font: inherit; color: inherit; }
-  :focus-visible { outline: 3px solid color-mix(in srgb, var(--red) 45%, transparent); outline-offset: 2px; }
+:root {
+  --red: #D9534F; --red-d: #C2413D; --red-soft: #FCEBEA;
+  --bg: #F4F5F8; --card: #fff; --ink: #1E2330; --sub: #5D6474; --muted: #8E95A4; --line: #E6E8EE;
+  --green: #3E9B5F; --green-soft: #E5F4EA; --blue: #2F6FE4; --blue-soft: #E8EFFD; --fb: #1877F2;
+  --warn: #A86A12; --warn-soft: #FDF3E1;
+  --shadow: 0 1px 2px rgba(30,35,48,.05), 0 8px 24px rgba(30,35,48,.08);
+  --f: "Noto Sans Thai", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; min-height: 100%; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--f); -webkit-font-smoothing: antialiased; }
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; border: 0; background: none; padding: 0; }
+:focus-visible { outline: 3px solid color-mix(in srgb, var(--red) 50%, transparent); outline-offset: 2px; }
 
-  .wrap { width: 100%; max-width: 420px; }
-  .brand { text-align: center; color: #fff; margin-bottom: 18px; }
-  .logo { width: 64px; height: 64px; margin: 0 auto 10px; border-radius: 18px; background: #fff; color: var(--red);
-    display: grid; place-items: center; font-size: 34px; font-weight: 800; box-shadow: 0 8px 20px rgba(0,0,0,.12); }
-  .brand h1 { margin: 0; font-size: 24px; letter-spacing: .2px; }
-  .brand p { margin: 2px 0 0; opacity: .9; font-size: 14px; }
+.app { max-width: 460px; margin: 0 auto; min-height: 100svh; display: flex; flex-direction: column; padding-bottom: max(24px, env(safe-area-inset-bottom)); }
+.hero { background: var(--red); color: #fff; text-align: center; padding: calc(40px + env(safe-area-inset-top)) 20px 78px; border-radius: 0 0 32px 32px; }
+.logo { width: 72px; height: 72px; margin: 0 auto; border-radius: 20px; background: #fff; color: var(--red); display: grid; place-items: center; font: 800 40px "Noto Sans SC", sans-serif; box-shadow: 0 8px 20px rgba(0,0,0,.12); }
+.hero h1 { margin: 14px 0 2px; font-size: 25px; letter-spacing: .2px; }
+.hero p { margin: 0; opacity: .92; font-size: 13.5px; }
 
-  .card { background: var(--card); border-radius: 24px; padding: 22px 20px 24px; box-shadow: var(--shadow); }
+.card { background: var(--card); border-radius: 24px; box-shadow: var(--shadow); margin: -54px 16px 0; padding: 20px 18px 22px; position: relative; }
+.tabs { display: grid; grid-template-columns: 1fr 1fr; background: var(--bg); border-radius: 14px; padding: 4px; margin-bottom: 16px; }
+.tabs button { padding: 9px 0; border-radius: 11px; font-weight: 700; color: var(--sub); transition: background .15s, color .15s; }
+.tabs button[aria-selected="true"] { background: #fff; color: var(--red); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+h2 { margin: 0 0 4px; font-size: 21px; }
+.lead { margin: 0 0 14px; color: var(--muted); font-size: 13px; }
 
-  .tabs { display: grid; grid-template-columns: 1fr 1fr; background: var(--bg); border-radius: 14px; padding: 4px; margin-bottom: 18px; }
-  .tabs button { border: 0; background: none; padding: 10px; border-radius: 11px; font-weight: 700; color: var(--sub); cursor: pointer; transition: background .15s, color .15s; }
-  .tabs button[aria-selected="true"] { background: var(--red); color: #fff; box-shadow: 0 2px 6px rgba(217,83,79,.3); }
+form { display: flex; flex-direction: column; gap: 12px; }
+label { display: flex; flex-direction: column; gap: 6px; font-weight: 700; font-size: 13px; }
+.field { position: relative; }
+.field input { width: 100%; height: 48px; border-radius: 14px; border: 1.5px solid var(--line); background: #fff; padding: 0 14px; font-weight: 500; font-size: 15px; transition: border-color .15s, box-shadow .15s; }
+.field input::placeholder { color: #B3B8C4; }
+.field input:focus { outline: none; border-color: var(--red); box-shadow: 0 0 0 4px var(--red-soft); }
+.field input.bad { border-color: var(--red); }
+.eye { position: absolute; right: 6px; top: 6px; width: 36px; height: 36px; border-radius: 10px; color: var(--muted); display: grid; place-items: center; }
+.eye:hover { background: var(--bg); }
+.hint { font-size: 12px; font-weight: 600; color: var(--muted); margin-top: -4px; }
+.hint.ok { color: var(--green); } .hint.no { color: var(--red); }
+.row { display: flex; justify-content: space-between; align-items: center; }
+.link { color: var(--red); font-weight: 700; font-size: 13px; }
+.check { flex-direction: row; align-items: flex-start; gap: 10px; font-weight: 500; color: var(--sub); }
+.check input { width: 19px; height: 19px; margin: 1px 0 0; accent-color: var(--red); flex: none; }
 
-  form { display: flex; flex-direction: column; gap: 12px; }
-  label { display: flex; flex-direction: column; gap: 6px; font-size: 13.5px; font-weight: 700; }
-  .field { position: relative; }
-  input[type=email], input[type=password], input[type=text] {
-    width: 100%; padding: 13px 14px; border: 1.5px solid var(--line); border-radius: 14px; background: #fff;
-    font-size: 16px; /* 16px stops iOS zooming into the field */ transition: border-color .15s, box-shadow .15s;
-  }
-  input:focus { outline: none; border-color: var(--red); box-shadow: 0 0 0 4px var(--red-soft); }
-  .eye { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); border: 0; background: none; padding: 8px;
-    color: var(--muted); cursor: pointer; border-radius: 10px; font-size: 12.5px; font-weight: 700; }
-  .hint { font-size: 12px; color: var(--muted); font-weight: 500; }
+.btn { height: 50px; border-radius: 14px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; transition: transform .08s, filter .15s, background .15s; }
+.btn:active { transform: scale(.985); }
+.btn:disabled { opacity: .6; cursor: progress; }
+.primary { background: var(--red); color: #fff; } .primary:hover { background: var(--red-d); }
+.line { background: #fff; border: 1.5px solid var(--line); } .line:hover { background: var(--bg); }
+.fb { background: var(--fb); color: #fff; } .fb:hover { filter: brightness(.95); }
+.social { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.divider { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 12px; margin: 4px 0; }
+.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.spin { width: 18px; height: 18px; border-radius: 50%; border: 2.5px solid rgba(255,255,255,.45); border-top-color: #fff; animation: r .7s linear infinite; }
+.line .spin { border-color: var(--line); border-top-color: var(--red); }
+@keyframes r { to { transform: rotate(360deg); } }
 
-  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 50px; width: 100%;
-    border: 0; border-radius: 14px; font-weight: 800; font-size: 16px; cursor: pointer; transition: background .15s, transform .05s; }
-  .btn:active { transform: scale(.99); }
-  .btn.primary { background: var(--red); color: #fff; margin-top: 4px; }
-  .btn.primary:hover { background: var(--red-d); }
-  .btn.ghost { background: var(--bg); color: var(--ink); }
-  .btn.ghost:hover { background: var(--line); }
-  .btn:disabled { opacity: .65; cursor: progress; }
-  .spin { width: 18px; height: 18px; border-radius: 50%; border: 2.5px solid rgba(255,255,255,.45); border-top-color: #fff; animation: r .8s linear infinite; }
-  @keyframes r { to { transform: rotate(360deg); } }
+.msg { border-radius: 13px; padding: 10px 12px; font-size: 13px; font-weight: 600; display: flex; gap: 8px; align-items: flex-start; }
+.msg.err { background: var(--red-soft); color: var(--red-d); }
+.msg.ok { background: var(--green-soft); color: var(--green); }
+.msg.info { background: var(--blue-soft); color: var(--blue); }
+.msg.warn { background: var(--warn-soft); color: var(--warn); }
+.foot { text-align: center; color: var(--muted); font-size: 13px; margin: 16px 0 0; }
 
-  .msg { border-radius: 12px; padding: 10px 12px; font-size: 13.5px; font-weight: 600; }
-  .msg.err { background: var(--red-soft); color: var(--red-d); }
-  .msg.ok { background: var(--green-soft); color: var(--green); }
+/* profile */
+.pHero { padding-bottom: 92px; }
+.avatar { width: 92px; height: 92px; margin: 0 auto; border-radius: 50%; background: #fff; color: var(--red); display: grid; place-items: center; font-size: 40px; font-weight: 800; overflow: hidden; border: 4px solid rgba(255,255,255,.55); }
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.pCard { text-align: center; padding-top: 22px; }
+.pCard h2 { font-size: 23px; margin: 0; overflow-wrap: anywhere; }
+.pCard .email { color: var(--sub); margin: 2px 0 10px; overflow-wrap: anywhere; }
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 999px; background: var(--bg); font-size: 12px; font-weight: 700; color: var(--sub); }
+.info { margin: 18px 0 0; border-radius: 18px; overflow: hidden; background: var(--line); display: flex; flex-direction: column; gap: 1px; text-align: left; }
+.info div { background: #fff; padding: 12px 14px; display: flex; justify-content: space-between; gap: 12px; font-size: 14px; }
+.info dt { color: var(--muted); font-weight: 600; flex: none; }
+.info dd { margin: 0; font-weight: 700; text-align: right; overflow-wrap: anywhere; min-width: 0; }
+.stack { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+.edit { display: flex; flex-direction: row; gap: 8px; }
+.edit .field { flex: 1; }
+.edit .btn { width: auto; padding: 0 18px; }
+.logout { color: var(--red); background: var(--red-soft); } .logout:hover { background: #F8DAD8; }
 
-  /* profile */
-  .profile { text-align: center; margin-top: 48px; }
-  .avatar { width: 88px; height: 88px; margin: -66px auto 10px; border-radius: 50%; background: var(--red); color: #fff;
-    display: grid; place-items: center; font-size: 38px; font-weight: 800; border: 5px solid #fff; box-shadow: 0 6px 16px rgba(30,35,48,.15); }
-  .profile h2 { margin: 0; font-size: 22px; overflow-wrap: anywhere; }
-  .profile .email { margin: 2px 0 14px; color: var(--sub); overflow-wrap: anywhere; }
-  .badge { display: inline-flex; align-items: center; gap: 6px; background: var(--green-soft); color: var(--green); font-size: 12.5px; font-weight: 700; padding: 5px 12px; border-radius: 999px; }
-  .rows { margin: 18px 0; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; text-align: left; }
-  .row { display: flex; justify-content: space-between; gap: 12px; padding: 12px 14px; font-size: 14px; }
-  .row + .row { border-top: 1px solid var(--line); }
-  .row span { color: var(--muted); flex: none; }
-  .row b { font-weight: 600; text-align: right; overflow-wrap: anywhere; }
+.toast { position: fixed; left: 50%; bottom: max(24px, env(safe-area-inset-bottom)); transform: translateX(-50%); background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 999px; font-size: 13.5px; font-weight: 600; z-index: 9; max-width: calc(100% - 32px); box-shadow: 0 8px 24px rgba(0,0,0,.2); }
+.loading { flex: 1; display: grid; place-items: center; }
+.loading .spin { width: 34px; height: 34px; border-color: var(--line); border-top-color: var(--red); }
 
-  .loading { text-align: center; color: var(--sub); padding: 30px 0; }
-  .loading .spin { margin: 0 auto 10px; border-color: var(--line); border-top-color: var(--red); width: 28px; height: 28px; }
-  .foot { text-align: center; color: var(--muted); font-size: 12px; margin-top: 14px; }
-
-  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation-duration: 2s !important; } }
+@media (min-width: 640px) {
+  body { background: #E3E6EC; }
+  .app { padding-top: 40px; }
+  .hero { border-radius: 32px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation-duration: 2s !important; } }
 </style>
 </head>
 <body>
-<main class="wrap">
-  <header class="brand">
-    <div class="logo">汉</div>
-    <h1>HSK Momo</h1>
-    <p>ฝึกภาษาจีน สอบ HSK ได้ทุกที่</p>
-  </header>
+<main class="app">
 
-  <!-- loading while the saved session is checked -->
-  <section class="card loading" id="loadingView"><div class="spin"></div>กำลังโหลด…</section>
+  <!-- loading -->
+  <section id="vLoading" class="loading"><div class="spin" aria-label="กำลังโหลด"></div></section>
 
-  <!-- sign in / sign up -->
-  <section class="card" id="authView" hidden>
-    <div class="tabs" role="tablist">
-      <button type="button" role="tab" id="tabLogin" aria-selected="true">เข้าสู่ระบบ</button>
-      <button type="button" role="tab" id="tabSignup" aria-selected="false">สมัครสมาชิก</button>
-    </div>
+  <!-- auth -->
+  <section id="vAuth" hidden>
+    <header class="hero">
+      <div class="logo">汉</div>
+      <h1>HSK Momo</h1>
+      <p>ฝึกภาษาจีน สอบ HSK ได้ทุกที่</p>
+    </header>
+    <div class="card">
+      <div class="tabs" role="tablist">
+        <button role="tab" id="tLogin" aria-selected="true" data-tab="login">เข้าสู่ระบบ</button>
+        <button role="tab" id="tSignup" aria-selected="false" data-tab="signup">สมัครสมาชิก</button>
+      </div>
 
-    <form id="authForm" novalidate>
-      <label id="nickWrap" hidden>ชื่อเล่น
-        <input type="text" id="nickname" placeholder="เช่น สมชาย" maxlength="40" autocomplete="nickname">
-      </label>
-      <label>อีเมล
-        <input type="email" id="email" placeholder="you@email.com" autocomplete="email" inputmode="email" required>
-      </label>
-      <label>รหัสผ่าน
-        <div class="field">
-          <input type="password" id="password" placeholder="อย่างน้อย 6 ตัวอักษร" autocomplete="current-password" required minlength="6">
-          <button type="button" class="eye" id="eye" aria-label="แสดงรหัสผ่าน">แสดง</button>
+      <div id="authMsg" class="msg" hidden role="alert"></div>
+
+      <!-- login -->
+      <form id="fLogin" novalidate>
+        <label>อีเมล<span class="field"><input id="lEmail" type="email" autocomplete="email" placeholder="you@email.com" required></span></label>
+        <label>รหัสผ่าน<span class="field"><input id="lPw" type="password" autocomplete="current-password" placeholder="••••••••" required><button type="button" class="eye" data-eye="lPw" aria-label="แสดงรหัสผ่าน"></button></span></label>
+        <div class="row"><span></span><button type="button" class="link" id="bForgot">ลืมรหัสผ่าน?</button></div>
+        <button class="btn primary" type="submit">เข้าสู่ระบบ</button>
+      </form>
+
+      <!-- signup -->
+      <form id="fSignup" novalidate hidden>
+        <label>ชื่อเล่น<span class="field"><input id="sNick" type="text" autocomplete="nickname" maxlength="40" placeholder="เช่น สมชาย" required></span></label>
+        <label>อีเมล<span class="field"><input id="sEmail" type="email" autocomplete="email" placeholder="you@email.com" required></span></label>
+        <label>รหัสผ่าน<span class="field"><input id="sPw" type="password" autocomplete="new-password" placeholder="อย่างน้อย 8 ตัว" required><button type="button" class="eye" data-eye="sPw" aria-label="แสดงรหัสผ่าน"></button></span></label>
+        <div id="pwHint" class="hint">8 ตัวขึ้นไป มีตัวอักษรและตัวเลข</div>
+        <label>ยืนยันรหัสผ่าน<span class="field"><input id="sPw2" type="password" autocomplete="new-password" placeholder="พิมพ์รหัสผ่านอีกครั้ง" required></span></label>
+        <label class="check"><input id="sAgree" type="checkbox"> ฉันยอมรับเงื่อนไขการใช้งานและนโยบายความเป็นส่วนตัว</label>
+        <button class="btn primary" type="submit">สร้างบัญชี</button>
+      </form>
+
+      <!-- forgot -->
+      <form id="fForgot" novalidate hidden>
+        <h2>ลืมรหัสผ่าน</h2>
+        <p class="lead">กรอกอีเมลที่ใช้สมัคร เราจะส่งลิงก์สำหรับตั้งรหัสผ่านใหม่ไปที่อีเมลนี้</p>
+        <label>อีเมล<span class="field"><input id="fEmail" type="email" autocomplete="email" placeholder="you@email.com" required></span></label>
+        <button class="btn primary" type="submit">ส่งลิงก์ไปที่อีเมล</button>
+        <button class="btn line" type="button" data-tab="login">กลับไปหน้าเข้าสู่ระบบ</button>
+      </form>
+
+      <!-- new password (after clicking the email link) -->
+      <form id="fReset" novalidate hidden>
+        <h2>ตั้งรหัสผ่านใหม่</h2>
+        <p class="lead">ยืนยันอีเมลเรียบร้อยแล้ว ตั้งรหัสผ่านใหม่ได้เลย</p>
+        <label>รหัสผ่านใหม่<span class="field"><input id="rPw" type="password" autocomplete="new-password" placeholder="อย่างน้อย 8 ตัว" required><button type="button" class="eye" data-eye="rPw" aria-label="แสดงรหัสผ่าน"></button></span></label>
+        <label>ยืนยันรหัสผ่านใหม่<span class="field"><input id="rPw2" type="password" autocomplete="new-password" required></span></label>
+        <button class="btn primary" type="submit">บันทึกรหัสผ่านใหม่</button>
+      </form>
+
+      <div id="socialBox">
+        <div class="divider">หรือเข้าสู่ระบบด้วย</div>
+        <div class="social">
+          <button class="btn line" data-oauth="google" type="button">
+            <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.5l6.7-6.7C35.6 2.4 30.2 0 24 0 14.6 0 6.6 5.4 2.7 13.3l7.8 6C12.4 13.7 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.4c-.5 2.9-2.2 5.3-4.6 6.9l7.4 5.7c4.3-4 6.9-9.9 6.9-17.1z"/><path fill="#FBBC05" d="M10.5 28.7A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.2.8-4.7l-7.8-6A24 24 0 0 0 0 24c0 3.9.9 7.5 2.6 10.7z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.8-5.8l-7.4-5.7c-2.1 1.4-4.8 2.3-8.4 2.3-6.3 0-11.6-4.2-13.5-10l-7.9 6C6.5 42.6 14.6 48 24 48z"/></svg>
+            Google</button>
+          <button class="btn fb" data-oauth="facebook" type="button">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 8h3V4h-3c-2.8 0-4.5 1.8-4.5 4.6V11H7v4h2.5v9h4v-9h3l.5-4h-3.5V9c0-.6.4-1 1-1z"/></svg>
+            Facebook</button>
         </div>
-        <span class="hint" id="pwHint" hidden>รหัสผ่านอย่างน้อย 6 ตัวอักษร</span>
-      </label>
-      <div class="msg" id="msg" role="status" hidden></div>
-      <button class="btn primary" type="submit" id="submitBtn">เข้าสู่ระบบ</button>
-    </form>
+      </div>
+    </div>
+    <p class="foot" id="footSwitch">ยังไม่มีบัญชี? <button class="link" data-tab="signup">สมัครสมาชิก</button></p>
   </section>
 
   <!-- profile -->
-  <section class="card profile" id="profileView" hidden>
-    <div class="avatar" id="avatar">?</div>
-    <h2 id="pNick">—</h2>
-    <p class="email" id="pEmail">—</p>
-    <span class="badge">● เข้าสู่ระบบแล้ว</span>
-    <div class="rows">
-      <div class="row"><span>ชื่อเล่น</span><b id="rNick">—</b></div>
-      <div class="row"><span>อีเมล</span><b id="rEmail">—</b></div>
-      <div class="row"><span>สมัครเมื่อ</span><b id="rCreated">—</b></div>
-      <div class="row"><span>เข้าใช้ล่าสุด</span><b id="rLast">—</b></div>
+  <section id="vProfile" hidden>
+    <header class="hero pHero">
+      <div class="avatar" id="pAvatar">ส</div>
+    </header>
+    <div class="card pCard">
+      <h2 id="pNick">—</h2>
+      <p class="email" id="pEmail">—</p>
+      <span class="pill" id="pProvider">เข้าสู่ระบบด้วยอีเมล</span>
+      <dl class="info">
+        <div><dt>ชื่อเล่น</dt><dd id="iNick">—</dd></div>
+        <div><dt>อีเมล</dt><dd id="iEmail">—</dd></div>
+        <div><dt>สมัครเมื่อ</dt><dd id="iCreated">—</dd></div>
+        <div><dt>เข้าสู่ระบบล่าสุด</dt><dd id="iLast">—</dd></div>
+      </dl>
+      <div class="stack">
+        <form id="fNick" class="edit" novalidate>
+          <span class="field"><input id="eNick" maxlength="40" placeholder="เปลี่ยนชื่อเล่น" aria-label="ชื่อเล่นใหม่"></span>
+          <button class="btn line" type="submit">บันทึก</button>
+        </form>
+        <button class="btn logout" id="bLogout" type="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 5H5v14h5M14 8l4 4-4 4M18 12H9"/></svg>
+          ออกจากระบบ</button>
+      </div>
     </div>
-    <button class="btn ghost" id="logoutBtn" type="button">ออกจากระบบ</button>
   </section>
-
-  <p class="foot">เชื่อมต่อกับ Supabase</p>
 </main>
+<div class="toast" id="toast" hidden role="status"></div>
 
 <script>
-/* ---------- Supabase connection ---------- */
-// The client needs the project's base URL (without /rest/v1/).
+'use strict';
+/* ====== Supabase connection ====== */
 const SUPABASE_URL = 'https://eoinanjbufbcbcdvntvz.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_dTtcjGnI958kv3FwapVujw_osfLrJNK';
+const SUPABASE_ANON_KEY = 'sb_publishable_dTtcjGnI958kv3FwapVujw_osfLrJNK';
 
 const $ = (id) => document.getElementById(id);
-const views = { loading: $('loadingView'), auth: $('authView'), profile: $('profileView') };
-let mode = 'login';      // 'login' | 'signup'
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const PW_RE = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
+const EYE = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+const EYE_OFF = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18M10.6 5.1A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.1M6.6 6.6C3.8 8.4 2 12 2 12s3.5 7 10 7c1.6 0 3-.4 4.3-1"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
+document.querySelectorAll('[data-eye]').forEach((b) => (b.innerHTML = EYE));
+
 let sb = null;
+let recovering = false;
 
-function show(name) { for (const k in views) views[k].hidden = k !== name; }
-function message(text, type = 'err') { const m = $('msg'); m.textContent = text; m.className = 'msg ' + type; m.hidden = !text; }
-function busy(on) {
-  const b = $('submitBtn'); b.disabled = on;
-  b.innerHTML = on ? '<span class="spin"></span> กรุณารอสักครู่…' : (mode === 'login' ? 'เข้าสู่ระบบ' : 'สร้างบัญชี');
+/* ====== helpers ====== */
+function toast(text) { const t = $('toast'); t.textContent = text; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => (t.hidden = true), 2800); }
+function msg(text, kind = 'err') { const m = $('authMsg'); if (!text) { m.hidden = true; return; } m.className = 'msg ' + kind; m.textContent = text; m.hidden = false; }
+function busy(btn, on) {
+  if (on) { btn.dataset.label = btn.innerHTML; btn.innerHTML = '<span class="spin"></span>'; btn.disabled = true; }
+  else if (btn.dataset.label) { btn.innerHTML = btn.dataset.label; btn.disabled = false; }
 }
-
-function setMode(m) {
-  mode = m;
-  $('tabLogin').setAttribute('aria-selected', m === 'login');
-  $('tabSignup').setAttribute('aria-selected', m === 'signup');
-  $('nickWrap').hidden = m !== 'signup';
-  $('pwHint').hidden = m !== 'signup';
-  $('password').autocomplete = m === 'signup' ? 'new-password' : 'current-password';
-  message('');
-  busy(false);
+function th(err) {
+  const m = (err && (err.message || err.error_description || String(err))) || '';
+  const map = [
+    [/invalid login credentials/i, 'อีเมลหรือรหัสผ่านไม่ถูกต้อง'],
+    [/email not confirmed/i, 'ยังไม่ได้ยืนยันอีเมล กรุณากดลิงก์ยืนยันในอีเมลของคุณก่อน (ดูในกล่องสแปมด้วย)'],
+    [/user already registered|already been registered/i, 'อีเมลนี้สมัครไว้แล้ว ลองเข้าสู่ระบบหรือกด "ลืมรหัสผ่าน"'],
+    [/password should be at least/i, 'รหัสผ่านสั้นเกินไป'],
+    [/rate limit|too many requests|security purposes/i, 'ทำรายการบ่อยเกินไป กรุณารอสักครู่แล้วลองใหม่'],
+    [/provider is not enabled|unsupported provider/i, 'ยังไม่ได้เปิดการเข้าสู่ระบบแบบนี้ใน Supabase (Authentication → Providers)'],
+    [/invalid api key|no api key/i, 'คีย์ Supabase ไม่ถูกต้อง'],
+    [/failed to fetch|network/i, 'เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่'],
+    [/signups not allowed/i, 'ระบบปิดรับสมัครสมาชิกใหม่อยู่'],
+    [/same.*password|different from the old/i, 'รหัสผ่านใหม่ต้องไม่ซ้ำกับรหัสเดิม'],
+  ];
+  for (const [re, text] of map) if (re.test(m)) return text;
+  return m || 'เกิดข้อผิดพลาด กรุณาลองใหม่';
 }
+const fmtDate = (s) => (s ? new Date(s).toLocaleString('th-TH', { dateStyle: 'medium', timeStyle: 'short' }) : '—');
+const nickOf = (u) => { const md = u.user_metadata || {}; return md.nickname || md.full_name || md.name || (u.email || '').split('@')[0] || 'ผู้ใช้'; };
+const PROVIDER = { email: 'อีเมล', google: 'Google', facebook: 'Facebook' };
 
-// Turn Supabase's English errors into clear Thai messages.
-function thaiError(err) {
-  const s = (err && (err.message || err.error_description || String(err))) || '';
-  if (/invalid login credentials/i.test(s)) return 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
-  if (/email not confirmed/i.test(s)) return 'ยังไม่ได้ยืนยันอีเมล กรุณากดลิงก์ยืนยันในกล่องจดหมายก่อน';
-  if (/already registered|already exists/i.test(s)) return 'อีเมลนี้สมัครไว้แล้ว ลองเข้าสู่ระบบแทน';
-  if (/password should be at least|weak/i.test(s)) return 'รหัสผ่านสั้นหรือง่ายเกินไป (อย่างน้อย 6 ตัวอักษร)';
-  if (/rate limit|too many/i.test(s)) return 'ส่งคำขอบ่อยเกินไป กรุณารอสักครู่แล้วลองใหม่';
-  if (/invalid.*email|unable to validate email/i.test(s)) return 'รูปแบบอีเมลไม่ถูกต้อง';
-  if (/signups not allowed|signup.*disabled/i.test(s)) return 'ระบบปิดการสมัครสมาชิกอยู่ (เปิดได้ใน Supabase > Authentication)';
-  if (/failed to fetch|network/i.test(s)) return 'เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กรุณาตรวจสอบอินเทอร์เน็ต';
-  return 'เกิดข้อผิดพลาด: ' + s;
+/* ====== views ====== */
+function show(view) { ['vLoading', 'vAuth', 'vProfile'].forEach((v) => ($(v).hidden = v !== view)); window.scrollTo(0, 0); }
+function tab(name) {
+  msg('');
+  const forms = { login: 'fLogin', signup: 'fSignup', forgot: 'fForgot', reset: 'fReset' };
+  Object.entries(forms).forEach(([k, id]) => ($(id).hidden = k !== name));
+  $('tLogin').setAttribute('aria-selected', name === 'login');
+  $('tSignup').setAttribute('aria-selected', name === 'signup');
+  document.querySelector('.tabs').hidden = name === 'forgot' || name === 'reset';
+  $('socialBox').hidden = name === 'forgot' || name === 'reset';
+  $('footSwitch').innerHTML = name === 'signup'
+    ? 'มีบัญชีอยู่แล้ว? <button class="link" data-tab="login">เข้าสู่ระบบ</button>'
+    : name === 'login' ? 'ยังไม่มีบัญชี? <button class="link" data-tab="signup">สมัครสมาชิก</button>' : '';
 }
-
-const fmtDate = (d) => d ? new Date(d).toLocaleString('th-TH', { dateStyle: 'medium', timeStyle: 'short' }) : '—';
-
 function renderProfile(user) {
-  const nick = (user.user_metadata && user.user_metadata.nickname) || user.email.split('@')[0];
-  $('avatar').textContent = nick.trim().charAt(0).toUpperCase() || '?';
-  $('pNick').textContent = nick;
-  $('pEmail').textContent = user.email;
-  $('rNick').textContent = nick;
-  $('rEmail').textContent = user.email;
-  $('rCreated').textContent = fmtDate(user.created_at);
-  $('rLast').textContent = fmtDate(user.last_sign_in_at);
-  show('profile');
+  const nick = nickOf(user);
+  const avatarUrl = (user.user_metadata || {}).avatar_url;
+  const av = $('pAvatar'); av.textContent = '';
+  if (avatarUrl) { const img = new Image(); img.alt = ''; img.src = avatarUrl; img.referrerPolicy = 'no-referrer'; img.onerror = () => { av.textContent = nick.slice(0, 1).toUpperCase(); }; av.appendChild(img); }
+  else av.textContent = nick.slice(0, 1).toUpperCase();
+  $('pNick').textContent = nick; $('iNick').textContent = nick;
+  $('pEmail').textContent = user.email || '—'; $('iEmail').textContent = user.email || '—';
+  const p = (user.app_metadata && user.app_metadata.provider) || 'email';
+  $('pProvider').textContent = 'เข้าสู่ระบบด้วย ' + (PROVIDER[p] || p);
+  $('iCreated').textContent = fmtDate(user.created_at);
+  $('iLast').textContent = fmtDate(user.last_sign_in_at);
+  $('eNick').value = '';
+  show('vProfile');
+}
+function applySession(session) {
+  if (recovering) { show('vAuth'); tab('reset'); return; }
+  if (session && session.user) renderProfile(session.user);
+  else { show('vAuth'); if (!$('fForgot').hidden || !$('fReset').hidden) tab('login'); }
 }
 
-/* ---------- events ---------- */
-$('tabLogin').onclick = () => setMode('login');
-$('tabSignup').onclick = () => setMode('signup');
-$('eye').onclick = () => {
-  const p = $('password'); const hidden = p.type === 'password';
-  p.type = hidden ? 'text' : 'password'; $('eye').textContent = hidden ? 'ซ่อน' : 'แสดง';
-};
-
-$('authForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const email = $('email').value.trim();
-  const password = $('password').value;
-  const nickname = $('nickname').value.trim();
-
-  if (mode === 'signup' && !nickname) return message('กรุณากรอกชื่อเล่น');
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return message('กรุณากรอกอีเมลให้ถูกต้อง');
-  if (password.length < 6) return message('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร');
-  if (!sb) return message('โหลดระบบ Supabase ไม่สำเร็จ กรุณารีเฟรชหน้า');
-
-  message(''); busy(true);
-  try {
-    if (mode === 'signup') {
-      const { data, error } = await sb.auth.signUp({
-        email, password,
-        options: { data: { nickname }, emailRedirectTo: location.href.split('#')[0] },
-      });
-      if (error) throw error;
-      // Supabase returns a user with no identities when the email is already registered.
-      if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) throw new Error('already registered');
-      if (data.session) { renderProfile(data.user); }
-      else {
-        setMode('login'); $('email').value = email; $('password').value = '';
-        message('สมัครสำเร็จ! กรุณาเปิดอีเมลแล้วกดลิงก์ยืนยัน จากนั้นกลับมาเข้าสู่ระบบ', 'ok');
-      }
-    } else {
-      const { data, error } = await sb.auth.signInWithPassword({ email, password });
-      if (error) throw error;
-      $('password').value = '';
-      renderProfile(data.user);
-    }
-  } catch (err) {
-    message(thaiError(err));
-  } finally {
-    busy(false);
+/* ====== events ====== */
+document.addEventListener('click', async (e) => {
+  const el = e.target.closest('button'); if (!el) return;
+  if (el.dataset.tab) { e.preventDefault(); tab(el.dataset.tab); return; }
+  if (el.dataset.eye) { const i = $(el.dataset.eye); const show = i.type === 'password'; i.type = show ? 'text' : 'password'; el.innerHTML = show ? EYE_OFF : EYE; return; }
+  if (el.dataset.oauth) {
+    if (location.protocol === 'file:') { msg('การเข้าสู่ระบบด้วย Google / Facebook ต้องเปิดเว็บผ่าน http:// หรือ https:// (เช่น อัปขึ้น Netlify / Vercel / GitHub Pages) ไม่สามารถเปิดจากไฟล์ในเครื่องโดยตรงได้', 'warn'); return; }
+    msg(''); busy(el, true);
+    const { error } = await sb.auth.signInWithOAuth({ provider: el.dataset.oauth, options: { redirectTo: location.origin + location.pathname } });
+    if (error) { busy(el, false); msg(th(error)); }
+    return; // the browser now goes to Google/Facebook and comes back here
   }
+  if (el.id === 'bForgot') { $('fEmail').value = $('lEmail').value.trim(); tab('forgot'); return; }
+  if (el.id === 'bLogout') { busy(el, true); const { error } = await sb.auth.signOut(); busy(el, false); if (error) return toast(th(error)); tab('login'); toast('ออกจากระบบแล้ว'); }
 });
 
-$('logoutBtn').onclick = async () => {
-  const b = $('logoutBtn'); b.disabled = true; b.textContent = 'กำลังออกจากระบบ…';
-  try { await sb.auth.signOut(); } catch (e) { console.warn(e); }
-  b.disabled = false; b.textContent = 'ออกจากระบบ';
-  setMode('login'); show('auth');
-};
+$('sPw').addEventListener('input', () => {
+  const v = $('sPw').value, h = $('pwHint');
+  h.className = 'hint' + (v ? (PW_RE.test(v) ? ' ok' : ' no') : '');
+  h.textContent = !v ? '8 ตัวขึ้นไป มีตัวอักษรและตัวเลข' : PW_RE.test(v) ? '✓ รหัสผ่านปลอดภัย (8 ตัวขึ้นไป มีตัวอักษรและตัวเลข)' : 'ต้องมี 8 ตัวขึ้นไป และมีทั้งตัวอักษรและตัวเลข';
+});
 
-/* ---------- start ---------- */
-(async function init() {
-  setMode('login');
-  if (!window.supabase || !window.supabase.createClient) {
-    show('auth'); return message('โหลดไลบรารี Supabase ไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ตแล้วรีเฟรช');
-  }
-  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
-    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
-  });
+$('fLogin').addEventListener('submit', async (e) => {
+  e.preventDefault(); const btn = e.submitter || e.target.querySelector('[type=submit]');
+  const email = $('lEmail').value.trim(), password = $('lPw').value;
+  if (!email || !password) return msg('กรุณากรอกอีเมลและรหัสผ่าน');
+  if (!EMAIL_RE.test(email)) return msg('รูปแบบอีเมลไม่ถูกต้อง');
+  msg(''); busy(btn, true);
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+  busy(btn, false);
+  if (error) return msg(th(error));
+  $('lPw').value = ''; toast('เข้าสู่ระบบสำเร็จ');
+});
 
-  // Keep the screen in step with the session (also covers the email-confirmation link and other tabs).
+$('fSignup').addEventListener('submit', async (e) => {
+  e.preventDefault(); const btn = e.submitter || e.target.querySelector('[type=submit]');
+  const nickname = $('sNick').value.trim(), email = $('sEmail').value.trim(), password = $('sPw').value, pw2 = $('sPw2').value;
+  const err = !nickname || !email || !password ? 'กรุณากรอกข้อมูลให้ครบทุกช่อง'
+    : !EMAIL_RE.test(email) ? 'รูปแบบอีเมลไม่ถูกต้อง'
+    : !PW_RE.test(password) ? 'รหัสผ่านต้องมี 8 ตัวขึ้นไป และมีทั้งตัวอักษรและตัวเลข'
+    : password !== pw2 ? 'รหัสผ่านทั้งสองช่องไม่ตรงกัน'
+    : !$('sAgree').checked ? 'กรุณายอมรับเงื่อนไขการใช้งานก่อน' : '';
+  if (err) return msg(err);
+  msg(''); busy(btn, true);
+  const { data, error } = await sb.auth.signUp({ email, password, options: { data: { nickname }, emailRedirectTo: location.protocol === 'file:' ? undefined : location.origin + location.pathname } });
+  busy(btn, false);
+  if (error) return msg(th(error));
+  // Supabase returns a user with no identities when the email is already registered (and confirmation is on)
+  if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) return msg('อีเมลนี้สมัครไว้แล้ว ลองเข้าสู่ระบบหรือกด "ลืมรหัสผ่าน"');
+  e.target.reset(); $('pwHint').className = 'hint'; $('pwHint').textContent = '8 ตัวขึ้นไป มีตัวอักษรและตัวเลข';
+  if (data.session) { toast('สมัครสมาชิกสำเร็จ'); return; }
+  tab('login'); $('lEmail').value = email;
+  msg(`สมัครสำเร็จ! เราส่งลิงก์ยืนยันไปที่ ${email} แล้ว กดลิงก์ในอีเมลแล้วกลับมาเข้าสู่ระบบ (ดูในกล่องสแปมด้วย)`, 'ok');
+});
+
+$('fForgot').addEventListener('submit', async (e) => {
+  e.preventDefault(); const btn = e.submitter || e.target.querySelector('[type=submit]');
+  const email = $('fEmail').value.trim();
+  if (!EMAIL_RE.test(email)) return msg('รูปแบบอีเมลไม่ถูกต้อง');
+  msg(''); busy(btn, true);
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.protocol === 'file:' ? undefined : location.origin + location.pathname });
+  busy(btn, false);
+  if (error) return msg(th(error));
+  msg(`ส่งลิงก์ตั้งรหัสผ่านใหม่ไปที่ ${email} แล้ว เปลี่ยนรหัสผ่านได้หลังกดลิงก์ในอีเมลเท่านั้น`, 'ok');
+});
+
+$('fReset').addEventListener('submit', async (e) => {
+  e.preventDefault(); const btn = e.submitter || e.target.querySelector('[type=submit]');
+  const a = $('rPw').value, b = $('rPw2').value;
+  if (!PW_RE.test(a)) return msg('รหัสผ่านต้องมี 8 ตัวขึ้นไป และมีทั้งตัวอักษรและตัวเลข');
+  if (a !== b) return msg('รหัสผ่านทั้งสองช่องไม่ตรงกัน');
+  busy(btn, true);
+  const { data, error } = await sb.auth.updateUser({ password: a });
+  busy(btn, false);
+  if (error) return msg(th(error));
+  recovering = false; e.target.reset(); toast('เปลี่ยนรหัสผ่านเรียบร้อย');
+  if (data.user) renderProfile(data.user);
+});
+
+$('fNick').addEventListener('submit', async (e) => {
+  e.preventDefault(); const btn = e.submitter || e.target.querySelector('[type=submit]');
+  const nickname = $('eNick').value.trim(); if (!nickname) return toast('กรุณากรอกชื่อเล่นใหม่');
+  busy(btn, true);
+  const { data, error } = await sb.auth.updateUser({ data: { nickname } });
+  busy(btn, false);
+  if (error) return toast(th(error));
+  renderProfile(data.user); toast('บันทึกชื่อเล่นแล้ว');
+});
+
+/* ====== start ====== */
+(async function start() {
+  if (!window.supabase || !window.supabase.createClient) { show('vAuth'); msg('โหลดไลบรารี Supabase ไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วรีเฟรชหน้า'); return; }
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } });
+
+  // errors that come back in the URL after an OAuth / email link
+  const q = new URLSearchParams(location.search + '&' + location.hash.slice(1));
+  const urlErr = q.get('error_description');
+  if (q.get('type') === 'recovery') recovering = true;
+
   sb.auth.onAuthStateChange((event, session) => {
-    if (session && session.user) renderProfile(session.user);
-    else if (event === 'SIGNED_OUT') { setMode('login'); show('auth'); }
+    if (event === 'PASSWORD_RECOVERY') recovering = true;
+    setTimeout(() => applySession(session)); // never await Supabase calls inside this callback
   });
-
   const { data } = await sb.auth.getSession();
-  if (data.session && data.session.user) renderProfile(data.session.user);
-  else show('auth');
+  applySession(data.session);
+  if (urlErr) msg(th({ message: urlErr }));
+  if (location.search || location.hash) history.replaceState(null, '', location.pathname);
 })();
 </script>
 </body>
