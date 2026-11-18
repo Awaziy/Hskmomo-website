@@ -282,6 +282,42 @@ body.web #tabbar { padding-bottom: max(10px, env(safe-area-inset-bottom)); }
   body.web #toast { bottom: 32px; }
 }
 
+/* ---- HSKK speaking test ---- */
+.kindSw { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: #fff; padding: 5px; border-radius: 16px; box-shadow: var(--shadow); }
+.kindSw button { display: flex; align-items: center; justify-content: center; gap: 7px; min-height: 42px; border-radius: 12px; font-weight: 700; color: var(--sub); }
+.kindSw button.on { background: var(--red); color: #fff; }
+.hkHero { display: flex; gap: 12px; align-items: center; background: var(--purple); color: #fff; border-radius: 22px; padding: 16px; }
+.hkHero b { display: block; font-size: 17px; } .hkHero small { opacity: .9; font-size: 12.5px; line-height: 1.45; display: block; }
+.hkHeroIc { width: 48px; height: 48px; border-radius: 14px; background: rgba(255,255,255,.18); display: grid; place-items: center; flex: none; }
+.hkLvs { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; }
+.hkLv { background: #fff; border-radius: 16px; padding: 12px 8px; box-shadow: var(--shadow); display: flex; flex-direction: column; align-items: center; gap: 1px; border: 2px solid transparent; }
+.hkLv b { font-size: 20px; } .hkLv span { font-size: 12.5px; font-weight: 700; } .hkLv small { font-size: 11px; color: var(--muted); }
+.hkLv.on { border-color: var(--purple); background: var(--purple-soft); color: var(--purple); }
+.setno.purple { background: var(--purple-soft); color: var(--purple); }
+.hkStruct { display: flex; flex-direction: column; gap: 8px; margin: 10px 0 6px; } .hkStruct > div { display: flex; align-items: center; gap: 10px; }
+.hkNo { width: 26px; height: 26px; border-radius: 8px; background: var(--purple-soft); color: var(--purple); display: grid; place-items: center; font-weight: 800; font-size: 13px; flex: none; }
+.hkBanner { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; background: var(--purple-soft); color: var(--purple); border-radius: 18px; padding: 14px; }
+.hkBanner b { display: block; color: var(--ink); } .hkBanner small { color: var(--sub); font-size: 12.5px; }
+.part small { font-size: 12px; color: var(--muted); }
+.qno { align-self: flex-start; display: inline-grid; place-items: center; min-width: 28px; height: 28px; padding: 0 6px; border-radius: 8px; background: var(--bg); font-weight: 800; font-size: 13px; margin-bottom: 6px; }
+.hkCard { display: flex; flex-direction: column; gap: 12px; align-items: stretch; }
+.hkText { font-size: 18px; line-height: 1.8; } .hkPy { color: var(--teal); font-size: 14px; }
+.hkPic { font-size: 54px; text-align: center; letter-spacing: 8px; background: var(--bg); border-radius: 16px; padding: 18px 8px; line-height: 1.3; }
+.hkStatus { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 14px; border-radius: 14px; background: var(--bg); color: var(--sub); }
+.hkStatus.listen { background: var(--teal-soft); color: var(--teal); } .hkStatus.rec { background: var(--red-soft); color: var(--red); }
+.hkStatus span { margin-left: auto; font-variant-numeric: tabular-nums; font-weight: 700; }
+.hkStatus .hkTrack { flex-basis: 100%; }
+.recDot { width: 14px; height: 14px; border-radius: 50%; background: var(--red); animation: recPulse 1.2s infinite; flex: none; }
+@keyframes recPulse { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
+.hkClock { background: var(--purple); color: #fff; border-radius: 20px; padding: 16px; text-align: center; }
+.hkClock small { opacity: .9; } .hkClock b { display: block; font-size: 44px; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.hkTrack { height: 6px; border-radius: 99px; background: rgba(0,0,0,.08); overflow: hidden; } .hkClock .hkTrack { background: rgba(255,255,255,.25); }
+.hkTrack i { display: block; height: 100%; background: currentColor; transition: width 1s linear; } .hkClock .hkTrack i { background: #fff; }
+.hkDots { display: flex; gap: 5px; flex-wrap: wrap; } .hkDots i { width: 9px; height: 9px; border-radius: 50%; background: var(--line); } .hkDots i.done { background: var(--purple); } .hkDots i.on { background: var(--red); }
+.hkRv { display: flex; flex-direction: column; gap: 8px; } .hkRv audio, .hkCard audio { width: 100%; height: 40px; }
+@media (prefers-reduced-motion: reduce) { .recDot { animation: none; } .hkTrack i { transition: none; } }
+@media (min-width: 960px) { body.web #phone[data-view="hskkRoom"] #screen > .pad { max-width: 760px; } }
+
 </style>
 </head>
 <body class="web">
@@ -1576,6 +1612,351 @@ render = function (reset) {
 
 render(true);
 sbStart();
+
+</script>
+<script>
+/* HSK Momo – HSKK speaking test (汉语水平口语考试), designed separately from the written HSK.
+ * Real structure:
+ *   初级  27 items · ~17 min (+7 min prep):  听后重复 15 · 听后回答 10 · 回答问题 2
+ *   中级  14 items · ~21 min (+10 min prep): 听后重复 10 · 看图说话 2 · 回答问题 2
+ *   高级   6 items · ~24 min (+10 min prep): 听后复述 3 · 朗读 1 · 回答问题 2
+ * Each answer is recorded with the microphone. With Supabase the recordings go to the private Storage
+ * bucket "hskk" (<user id>/<result id>/<item>.webm) and the teacher listens and gives the score (0–100, pass 60).
+ * Listening passages (高级 听后复述) and read-aloud texts (高级 朗读) come from the HSK 5 sets on the HSKmomotest site. */
+/* globals S, E, VOCAB, HSK5, LEVEL_WORDS, SCREENS, TAB_OF, P, store, render, go, toast, t, esc, ic, pill, playLines, stopAudio, closeSheet, sheet */
+'use strict';
+const HAS_SB = () => typeof SB !== 'undefined' && SB.on && SB.uid;
+
+/* ---------------- UI text (4 languages) ---------------- */
+const HKT = {
+  th: { title: 'สอบพูด HSKK', sub: 'สอบพูดภาษาจีน 3 ระดับ อัดเสียงคำตอบจริง ครูฟังและให้คะแนน', written: 'ข้อเขียน HSK', speaking: 'สอบพูด HSKK', lv1: 'ระดับต้น', lv2: 'ระดับกลาง', lv3: 'ระดับสูง',
+    lvFor1: 'เทียบ HSK 1–2', lvFor2: 'เทียบ HSK 3–4', lvFor3: 'เทียบ HSK 5–6', items: '{n} ข้อ', min: '{n} นาที', prep: 'เตรียมตัว {n} นาที', start: 'เริ่มสอบ', structure: 'โครงสร้างข้อสอบ',
+    repeat: 'ฟังแล้วพูดตาม', answer: 'ฟังคำถามแล้วตอบสั้น ๆ', question: 'ตอบคำถาม (พูดอย่างน้อย 5 ประโยค)', picture: 'ดูภาพแล้วพูดบรรยาย', retell: 'ฟังเรื่องแล้วเล่าซ้ำ', read: 'อ่านออกเสียง',
+    prepTitle: 'เวลาเตรียมตัว', prepNote: 'อ่านโจทย์ด้านล่างและเตรียมคำตอบ (จดโน้ตได้) เมื่อหมดเวลาการสอบจะเริ่มอัตโนมัติ', skipPrep: 'พร้อมแล้ว เริ่มเลย',
+    listen: 'กำลังเล่นโจทย์…', ready: 'เตรียมพูด…', rec: 'กำลังอัดเสียง', stopNext: 'หยุดอัด · ข้อต่อไป', replay: 'ฟังอีกครั้ง', showScript: 'ดูบทพูด', left: 'เหลือ {n} วินาที',
+    micAsk: 'การสอบพูดต้องใช้ไมโครโฟน กดเริ่มแล้วอนุญาตให้เว็บใช้ไมโครโฟน', micErr: 'เปิดไมโครโฟนไม่ได้ กรุณาอนุญาตการใช้ไมโครโฟนในเบราว์เซอร์ แล้วลองใหม่', micTest: 'ทดสอบไมโครโฟน', micOk: 'ไมโครโฟนพร้อม ✓',
+    review: 'ฟังทวนคำตอบก่อนส่ง', submit: 'ส่งคำตอบให้ครู', redo: 'สอบใหม่', uploading: 'กำลังอัปโหลดเสียง {i}/{n}…', sent: 'ส่งคำตอบแล้ว รอครูให้คะแนน', notRec: 'ไม่ได้อัดเสียง',
+    yours: 'เสียงของคุณ', sample: 'ตัวอย่างคำตอบ', script: 'บทพูด', score: 'คะแนนพูด (0–100)', pending: 'รอครูให้คะแนน', pass: 'ผ่าน', fail: 'ยังไม่ผ่าน', passLine: 'เกณฑ์ผ่าน 60/100',
+    grade: 'ให้คะแนน', comment: 'ความเห็นถึงนักเรียน', saved: 'บันทึกคะแนนแล้ว', loadingAudio: 'กำลังโหลดเสียง…', localOnly: 'เสียงเก็บในเครื่องนี้ชั่วคราว (โหมดทดลอง)', leave: 'ออกจากห้องสอบ? เสียงที่อัดไว้จะหายไป',
+    banner: 'สอบพูด HSKK 初级 · 中级 · 高级', bannerSub: 'ฝึกพูดตามรูปแบบข้อสอบจริง อัดเสียงส่งครู', partN: 'ส่วนที่ {n}', noMedia: 'เบราว์เซอร์นี้อัดเสียงไม่ได้ กรุณาใช้ Chrome, Edge หรือ Safari รุ่นล่าสุด' },
+  en: { title: 'HSKK Speaking Test', sub: 'Chinese speaking test in 3 levels – record real answers, your teacher listens and scores', written: 'HSK written', speaking: 'HSKK speaking', lv1: 'Beginner', lv2: 'Intermediate', lv3: 'Advanced',
+    lvFor1: '≈ HSK 1–2', lvFor2: '≈ HSK 3–4', lvFor3: '≈ HSK 5–6', items: '{n} items', min: '{n} min', prep: '{n} min prep', start: 'Start', structure: 'Test structure',
+    repeat: 'Listen and repeat', answer: 'Listen and answer briefly', question: 'Answer the question (5+ sentences)', picture: 'Describe the picture', retell: 'Listen and retell', read: 'Read aloud',
+    prepTitle: 'Preparation time', prepNote: 'Read the tasks below and prepare (notes allowed). The test starts automatically when time is up.', skipPrep: "I'm ready – start",
+    listen: 'Playing…', ready: 'Get ready…', rec: 'Recording', stopNext: 'Stop · next', replay: 'Play again', showScript: 'Show script', left: '{n} s left',
+    micAsk: 'The speaking test uses your microphone. Press start and allow microphone access.', micErr: 'Could not open the microphone. Please allow microphone access in your browser and try again.', micTest: 'Test microphone', micOk: 'Microphone ready ✓',
+    review: 'Listen back before sending', submit: 'Send to teacher', redo: 'Retake', uploading: 'Uploading audio {i}/{n}…', sent: 'Sent – waiting for the teacher to score', notRec: 'Not recorded',
+    yours: 'Your answer', sample: 'Sample answer', script: 'Script', score: 'Speaking score (0–100)', pending: 'Waiting for teacher', pass: 'Pass', fail: 'Not passed', passLine: 'Pass mark 60/100',
+    grade: 'Grade', comment: 'Comment to student', saved: 'Score saved', loadingAudio: 'Loading audio…', localOnly: 'Audio is kept on this device only (demo mode)', leave: 'Leave the test? Your recordings will be lost.',
+    banner: 'HSKK speaking 初级 · 中级 · 高级', bannerSub: 'Practise in the real test format and send recordings to your teacher', partN: 'Part {n}', noMedia: 'This browser cannot record audio. Please use the latest Chrome, Edge or Safari.' },
+  lo: { title: 'ສອບເວົ້າ HSKK', sub: 'ສອບເວົ້າພາສາຈີນ 3 ລະດັບ ອັດສຽງຄຳຕອບແທ້ ຄູຟັງແລະໃຫ້ຄະແນນ', written: 'ຂໍ້ຂຽນ HSK', speaking: 'ສອບເວົ້າ HSKK', lv1: 'ລະດັບຕົ້ນ', lv2: 'ລະດັບກາງ', lv3: 'ລະດັບສູງ',
+    lvFor1: 'ທຽບ HSK 1–2', lvFor2: 'ທຽບ HSK 3–4', lvFor3: 'ທຽບ HSK 5–6', items: '{n} ຂໍ້', min: '{n} ນາທີ', prep: 'ກຽມຕົວ {n} ນາທີ', start: 'ເລີ່ມສອບ', structure: 'ໂຄງສ້າງຂໍ້ສອບ',
+    repeat: 'ຟັງແລ້ວເວົ້າຕາມ', answer: 'ຟັງຄຳຖາມແລ້ວຕອບສັ້ນໆ', question: 'ຕອບຄຳຖາມ (ຢ່າງໜ້ອຍ 5 ປະໂຫຍກ)', picture: 'ເບິ່ງຮູບແລ້ວເວົ້າບັນຍາຍ', retell: 'ຟັງເລື່ອງແລ້ວເລົ່າຄືນ', read: 'ອ່ານອອກສຽງ',
+    prepTitle: 'ເວລາກຽມຕົວ', prepNote: 'ອ່ານໂຈດຂ້າງລຸ່ມແລະກຽມຄຳຕອບ ເມື່ອໝົດເວລາການສອບຈະເລີ່ມອັດຕະໂນມັດ', skipPrep: 'ພ້ອມແລ້ວ ເລີ່ມເລີຍ',
+    listen: 'ກຳລັງຫຼິ້ນໂຈດ…', ready: 'ກຽມເວົ້າ…', rec: 'ກຳລັງອັດສຽງ', stopNext: 'ຢຸດອັດ · ຂໍ້ຕໍ່ໄປ', replay: 'ຟັງອີກຄັ້ງ', showScript: 'ເບິ່ງບົດເວົ້າ', left: 'ເຫຼືອ {n} ວິນາທີ',
+    micAsk: 'ການສອບເວົ້າຕ້ອງໃຊ້ໄມໂຄຣໂຟນ ກົດເລີ່ມແລ້ວອະນຸຍາດໃຫ້ເວັບໃຊ້ໄມໂຄຣໂຟນ', micErr: 'ເປີດໄມໂຄຣໂຟນບໍ່ໄດ້ ກະລຸນາອະນຸຍາດໃນບຣາວເຊີແລ້ວລອງໃໝ່', micTest: 'ທົດສອບໄມໂຄຣໂຟນ', micOk: 'ໄມໂຄຣໂຟນພ້ອມ ✓',
+    review: 'ຟັງທວນຄຳຕອບກ່ອນສົ່ງ', submit: 'ສົ່ງຄຳຕອບໃຫ້ຄູ', redo: 'ສອບໃໝ່', uploading: 'ກຳລັງອັບໂຫຼດສຽງ {i}/{n}…', sent: 'ສົ່ງແລ້ວ ລໍຄູໃຫ້ຄະແນນ', notRec: 'ບໍ່ໄດ້ອັດສຽງ',
+    yours: 'ສຽງຂອງທ່ານ', sample: 'ຕົວຢ່າງຄຳຕອບ', script: 'ບົດເວົ້າ', score: 'ຄະແນນເວົ້າ (0–100)', pending: 'ລໍຄູໃຫ້ຄະແນນ', pass: 'ຜ່ານ', fail: 'ຍັງບໍ່ຜ່ານ', passLine: 'ເກນຜ່ານ 60/100',
+    grade: 'ໃຫ້ຄະແນນ', comment: 'ຄຳເຫັນເຖິງນັກຮຽນ', saved: 'ບັນທຶກຄະແນນແລ້ວ', loadingAudio: 'ກຳລັງໂຫຼດສຽງ…', localOnly: 'ສຽງເກັບໃນເຄື່ອງນີ້ຊົ່ວຄາວ (ໂໝດທົດລອງ)', leave: 'ອອກຈາກຫ້ອງສອບ? ສຽງທີ່ອັດໄວ້ຈະຫາຍ',
+    banner: 'ສອບເວົ້າ HSKK 初级 · 中级 · 高级', bannerSub: 'ຝຶກເວົ້າຕາມຮູບແບບຂໍ້ສອບແທ້ ອັດສຽງສົ່ງຄູ', partN: 'ພາກທີ {n}', noMedia: 'ບຣາວເຊີນີ້ອັດສຽງບໍ່ໄດ້ ກະລຸນາໃຊ້ Chrome, Edge ຫຼື Safari ລຸ້ນໃໝ່' },
+  vi: { title: 'Thi nói HSKK', sub: 'Thi nói tiếng Trung 3 cấp – ghi âm câu trả lời thật, giáo viên nghe và chấm điểm', written: 'HSK viết', speaking: 'HSKK nói', lv1: 'Sơ cấp', lv2: 'Trung cấp', lv3: 'Cao cấp',
+    lvFor1: '≈ HSK 1–2', lvFor2: '≈ HSK 3–4', lvFor3: '≈ HSK 5–6', items: '{n} câu', min: '{n} phút', prep: '{n} phút chuẩn bị', start: 'Bắt đầu', structure: 'Cấu trúc đề thi',
+    repeat: 'Nghe và nhắc lại', answer: 'Nghe và trả lời ngắn', question: 'Trả lời câu hỏi (ít nhất 5 câu)', picture: 'Nhìn tranh và mô tả', retell: 'Nghe và kể lại', read: 'Đọc to',
+    prepTitle: 'Thời gian chuẩn bị', prepNote: 'Đọc đề bên dưới và chuẩn bị câu trả lời. Hết giờ bài thi sẽ tự bắt đầu.', skipPrep: 'Sẵn sàng – bắt đầu',
+    listen: 'Đang phát…', ready: 'Chuẩn bị nói…', rec: 'Đang ghi âm', stopNext: 'Dừng · câu tiếp', replay: 'Nghe lại', showScript: 'Xem lời thoại', left: 'Còn {n} giây',
+    micAsk: 'Bài thi nói cần micro. Bấm bắt đầu và cho phép trang web dùng micro.', micErr: 'Không mở được micro. Hãy cho phép micro trong trình duyệt rồi thử lại.', micTest: 'Kiểm tra micro', micOk: 'Micro sẵn sàng ✓',
+    review: 'Nghe lại trước khi gửi', submit: 'Gửi cho giáo viên', redo: 'Thi lại', uploading: 'Đang tải âm thanh {i}/{n}…', sent: 'Đã gửi – chờ giáo viên chấm', notRec: 'Chưa ghi âm',
+    yours: 'Bài nói của bạn', sample: 'Câu trả lời mẫu', script: 'Lời thoại', score: 'Điểm nói (0–100)', pending: 'Chờ giáo viên chấm', pass: 'Đạt', fail: 'Chưa đạt', passLine: 'Điểm đạt 60/100',
+    grade: 'Chấm điểm', comment: 'Nhận xét cho học sinh', saved: 'Đã lưu điểm', loadingAudio: 'Đang tải âm thanh…', localOnly: 'Âm thanh chỉ lưu tạm trên máy này (chế độ thử)', leave: 'Rời phòng thi? Các bản ghi âm sẽ mất.',
+    banner: 'Thi nói HSKK 初级 · 中级 · 高级', bannerSub: 'Luyện nói theo đúng dạng đề thật và gửi ghi âm cho giáo viên', partN: 'Phần {n}', noMedia: 'Trình duyệt này không ghi âm được. Hãy dùng Chrome, Edge hoặc Safari mới nhất.' },
+};
+const hk = (k, v) => { let s = (HKT[S.set.lang] || HKT.th)[k] ?? HKT.th[k] ?? k; if (v) for (const x in v) s = s.split(`{${x}}`).join(String(v[x])); return s; };
+P.mic = 'M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3';
+
+/* ---------------- test content ---------------- */
+const HK_LEVELS = {
+  1: { zh: '初级', prep: 420, parts: [{ kind: 'repeat', zh: '听后重复', n: 15, rec: 10 }, { kind: 'answer', zh: '听后回答', n: 10, rec: 12 }, { kind: 'question', zh: '回答问题', n: 2, rec: 90, prep: true }], minutes: 17 },
+  2: { zh: '中级', prep: 600, parts: [{ kind: 'repeat', zh: '听后重复', n: 10, rec: 15 }, { kind: 'picture', zh: '看图说话', n: 2, rec: 120, prep: true }, { kind: 'question', zh: '回答问题', n: 2, rec: 120, prep: true }], minutes: 21 },
+  3: { zh: '高级', prep: 600, parts: [{ kind: 'retell', zh: '听后复述', n: 3, rec: 120 }, { kind: 'read', zh: '朗读', n: 1, rec: 120, prep: true }, { kind: 'question', zh: '回答问题', n: 2, rec: 150, prep: true }], minutes: 24 },
+};
+const HK_SETS = 3;
+const HK_ANSWER = [
+  ['你叫什么名字？', '我叫李明。'], ['你今年多大了？', '我今年二十岁。'], ['你家有几口人？', '我家有四口人。'], ['你喜欢吃什么水果？', '我喜欢吃苹果。'], ['今天星期几？', '今天星期三。'],
+  ['你每天几点起床？', '我每天七点起床。'], ['你会说汉语吗？', '会，我会说一点儿汉语。'], ['你喜欢什么颜色？', '我喜欢红色。'], ['你住在哪儿？', '我住在学校附近。'], ['你周末常常做什么？', '我周末常常看电影。'],
+  ['你喜欢喝茶还是喝咖啡？', '我喜欢喝茶。'], ['你是怎么来学校的？', '我坐公共汽车来学校。'], ['你的生日是几月几号？', '我的生日是五月八号。'], ['现在几点了？', '现在九点半。'], ['你有哥哥吗？', '有，我有一个哥哥。'],
+  ['你喜欢运动吗？', '喜欢，我常常跑步。'], ['你昨天晚上做什么了？', '我昨天晚上在家看书了。'], ['你最喜欢哪个季节？', '我最喜欢秋天。'], ['你想去中国吗？', '想，我想去北京。'], ['你学汉语多长时间了？', '我学汉语一年了。'],
+  ['你早饭一般吃什么？', '我早饭一般吃面包，喝牛奶。'], ['你的手机是什么颜色的？', '我的手机是黑色的。'], ['你喜欢看电影吗？', '很喜欢，我每个星期都看。'], ['你家离学校远吗？', '不太远，走路十分钟。'], ['你今天累不累？', '有点儿累。'],
+  ['你会做中国菜吗？', '我会做一点儿。'], ['你最好的朋友是谁？', '我最好的朋友是王芳。'], ['你喜欢下雨天吗？', '不喜欢，下雨天不能出去玩儿。'], ['你明天有课吗？', '明天上午有两节课。'], ['你一般几点睡觉？', '我一般十一点睡觉。'],
+];
+const HK_Q = {
+  1: [['请介绍一下你的家人。', 'Qǐng jièshào yíxià nǐ de jiārén.'], ['你周末一般做什么？', 'Nǐ zhōumò yìbān zuò shénme?'], ['请介绍一下你最好的朋友。', 'Qǐng jièshào yíxià nǐ zuì hǎo de péngyou.'],
+    ['你喜欢什么运动？为什么？', 'Nǐ xǐhuan shénme yùndòng? Wèi shénme?'], ['请说说你的一天。', 'Qǐng shuōshuo nǐ de yì tiān.'], ['你为什么学习汉语？', 'Nǐ wèi shénme xuéxí Hànyǔ?']],
+  2: [['你觉得学习外语最难的是什么？', 'Nǐ juéde xuéxí wàiyǔ zuì nán de shì shénme?'], ['你更喜欢住在城市还是农村？为什么？', 'Nǐ gèng xǐhuan zhù zài chéngshì háishi nóngcūn? Wèi shénme?'],
+    ['请谈谈你印象最深的一次旅行。', 'Qǐng tántan nǐ yìnxiàng zuì shēn de yí cì lǚxíng.'], ['你认为网上购物有哪些好处和坏处？', 'Nǐ rènwéi wǎngshàng gòuwù yǒu nǎxiē hǎochù hé huàichù?'],
+    ['你平时怎么放松自己？', 'Nǐ píngshí zěnme fàngsōng zìjǐ?'], ['如果你有一个月的假期，你打算做什么？', 'Rúguǒ nǐ yǒu yí ge yuè de jiàqī, nǐ dǎsuàn zuò shénme?']],
+  3: [['有人说“读万卷书，不如行万里路”，你同意这种说法吗？为什么？'], ['你认为科技的发展让人与人之间的关系更近了还是更远了？'], ['你认为一个人成功最重要的因素是什么？请举例说明。'],
+    ['城市化给人们的生活带来了哪些影响？'], ['你怎么看待年轻人毕业后先旅行、再找工作的做法？'], ['请谈谈环境保护与经济发展的关系。']],
+};
+const HK_PICS = [
+  { e: '👨‍👩‍👧 🎂 🎉', s: '今天是小女孩的生日，爸爸妈妈给她买了一个大蛋糕。一家人坐在一起唱生日歌，大家都非常开心。' },
+  { e: '🏃‍♀️ 🌳 ☀️', s: '早上天气很好，一位年轻的女士在公园里跑步。她每天都坚持锻炼，所以身体很健康。' },
+  { e: '🧑‍🍳 🍜 🔥', s: '一位厨师正在厨房里做面条。他做得很认真，面条看起来又香又好吃。' },
+  { e: '📚 ✏️ 😴', s: '已经很晚了，一个学生还在复习，可是他太累了，看着看着就睡着了。' },
+  { e: '🛒 🍎 🥛', s: '周末妈妈带着孩子去超市买东西，她们买了苹果、牛奶和很多别的东西。' },
+  { e: '✈️ 🧳 👫', s: '放假了，两个好朋友拿着行李去机场，准备一起去国外旅行，他们都很兴奋。' },
+];
+function hkRng(seed) { return () => { seed |= 0; seed = (seed + 0x6d2b79f5) | 0; let x = Math.imul(seed ^ (seed >>> 15), 1 | seed); x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x; return ((x ^ (x >>> 14)) >>> 0) / 4294967296; }; }
+function hkShuffle(a, r) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+const zhLen = (s) => (String(s).match(/[一-鿿]/g) || []).length;
+// passages from the HSK 5 sets of the HSKmomotest site
+const HK_SRC = (() => {
+  const retell = [], read = [];
+  for (const ex of HSK5 || []) for (const sec of ex.sections) for (const p of sec.parts) for (const g of p.groups) {
+    if (g.audio && g.audio.every((l) => l.s === 'N')) { const txt = g.audio.filter((l) => !/^问/.test(l.t)).map((l) => l.t.replace(/^述[:：]/, '')).join(''); if (zhLen(txt) >= 60 && zhLen(txt) <= 220) retell.push(txt); }
+    if (g.passage && !g.cloze && !/\{\{/.test(g.passage)) { const txt = g.passage.replace(/\[\d+\]/g, ''); if (zhLen(txt) >= 110 && zhLen(txt) <= 320) read.push(txt); }
+  }
+  return { retell: [...new Set(retell)], read: [...new Set(read)] };
+})();
+
+function hkBuild(level, set) {
+  const L = HK_LEVELS[level]; const r = hkRng(level * 977 + set * 131);
+  const words = (level === 1 ? [...LEVEL_WORDS[1], ...LEVEL_WORDS[2]] : level === 2 ? [...LEVEL_WORDS[3], ...LEVEL_WORDS[4]] : []).filter((w) => w.ex && zhLen(w.ex) >= (level === 1 ? 4 : 8) && zhLen(w.ex) <= (level === 1 ? 12 : 20));
+  const take = (arr, n, offset) => Array.from({ length: n }, (_, i) => arr[(offset + i) % arr.length]);
+  let n = 0; let voice = set % 2 ? 'F' : 'M'; const flip = () => (voice = voice === 'M' ? 'F' : 'M');
+  const parts = L.parts.map((p, pi) => {
+    let items = [];
+    if (p.kind === 'repeat') items = take(hkShuffle(words, r), p.n, 0).map((w) => ({ text: w.ex, py: w.exPy, audio: [{ s: flip(), t: w.ex }] }));
+    if (p.kind === 'answer') items = take(HK_ANSWER, p.n, (set - 1) * 10).map(([q, a]) => ({ text: q, sample: a, audio: [{ s: flip(), t: q }] }));
+    if (p.kind === 'question') items = take(HK_Q[level], p.n, (set - 1) * 2).map(([q, py]) => ({ text: q, py: level === 1 ? py : '', audio: level === 1 ? [{ s: 'N', t: q }] : null }));
+    if (p.kind === 'picture') items = take(HK_PICS, p.n, (set - 1) * 2).map((x) => ({ text: '请描述这幅图。', emoji: x.e, sample: x.s }));
+    if (p.kind === 'retell') items = take(HK_SRC.retell, p.n, (set - 1) * 3).map((x) => ({ text: x, audio: [{ s: flip(), t: x }] }));
+    if (p.kind === 'read') items = take(HK_SRC.read, p.n, set - 1).map((x) => ({ text: x }));
+    return { ...p, no: pi + 1, items: items.map((it) => ({ ...it, n: ++n, kind: p.kind, rec: p.rec })) };
+  });
+  return { id: `hskk-${level}-${set}`, hskk: true, level, set, title: `HSKK ${L.zh} · 第${set}套`, prepSec: L.prep, minutes: L.minutes, parts, count: n };
+}
+const hkGet = (id) => { const m = /^hskk-(\d)-(\d+)$/.exec(id || ''); return m ? hkBuild(+m[1], +m[2]) : null; };
+const hkItems = (ex) => ex.parts.flatMap((p) => p.items);
+const isHskk = (r) => /^hskk-/.test(r?.examId || '');
+
+/* ---------------- microphone ---------------- */
+const REC = { stream: null, rec: null, mime: '' };
+async function micOn() {
+  if (REC.stream) return true;
+  if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) { toast(hk('noMedia')); return false; }
+  try {
+    REC.stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+    REC.mime = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus'].find((m) => MediaRecorder.isTypeSupported?.(m)) || '';
+    return true;
+  } catch (e) { console.warn(e); toast(hk('micErr')); return false; }
+}
+function micOff() { REC.stream?.getTracks().forEach((x) => x.stop()); REC.stream = null; }
+function recStart(onBlob) {
+  const r = new MediaRecorder(REC.stream, REC.mime ? { mimeType: REC.mime } : undefined); const chunks = [];
+  r.ondataavailable = (e) => e.data && e.data.size && chunks.push(e.data);
+  r.onstop = () => onBlob(new Blob(chunks, { type: r.mimeType || REC.mime || 'audio/webm' }));
+  r.start(250); REC.rec = r;
+}
+function recStop() { if (REC.rec && REC.rec.state !== 'inactive') REC.rec.stop(); REC.rec = null; }
+const extOf = (type) => (/mp4|m4a|aac/.test(type) ? 'm4a' : /ogg/.test(type) ? 'ogg' : 'webm');
+
+/* ---------------- state ---------------- */
+const HK = { blobs: {}, urls: {}, signed: {}, timer: 0 };
+function hkStartExam(id, mode) {
+  const ex = hkGet(id); if (!ex) return;
+  S.ui.hk = { ex, mode, stage: 'prep', left: ex.prepSec, i: 0, phase: '', blobs: {}, urls: {}, started: Date.now(), plays: {} };
+  go('hskkRoom');
+}
+function hkCleanup() { const X = S.ui.hk; clearInterval(HK.timer); stopAudio(); recStop(); micOff(); if (X && X.stage !== 'done') S.ui.hk = null; }
+function hkTick() {
+  const X = S.ui.hk; if (!X || S.view !== 'hskkRoom') return clearInterval(HK.timer);
+  if (X.stage === 'prep' || X.phase === 'rec' || X.phase === 'ready') {
+    X.left = Math.max(0, X.left - 1);
+    const el = document.getElementById('hkLeft'); if (el) el.textContent = X.stage === 'prep' ? hkClock(X.left) : hk('left', { n: X.left });
+    const bar = document.getElementById('hkBar'); if (bar) bar.style.width = `${100 * X.left / (X.stage === 'prep' ? X.ex.prepSec : X.phase === 'ready' ? 3 : hkItems(X.ex)[X.i].rec)}%`;
+    if (X.left <= 0) { if (X.stage === 'prep') hkRun(); else if (X.phase === 'ready') hkRecord(); else hkNext(); }
+  }
+}
+const hkClock = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+async function hkRun() { const X = S.ui.hk; if (!(await micOn())) { X.stage = 'prep'; X.left = Math.max(X.left, 1); return render(); } X.stage = 'run'; X.i = 0; hkItem(); }
+function hkItem() {
+  const X = S.ui.hk; const it = hkItems(X.ex)[X.i];
+  if (it.audio) { X.phase = 'listen'; render(); playLines(it.audio, () => { if (S.ui.hk === X && X.phase === 'listen' && hkItems(X.ex)[X.i] === it) { X.phase = 'ready'; X.left = 2; render(); } }); }
+  else { X.phase = 'ready'; X.left = 3; render(); }
+}
+function hkRecord() {
+  const X = S.ui.hk; const it = hkItems(X.ex)[X.i]; X.phase = 'rec'; X.left = it.rec;
+  recStart((blob) => { X.blobs[it.n] = blob; if (X.urls[it.n]) URL.revokeObjectURL(X.urls[it.n]); X.urls[it.n] = URL.createObjectURL(blob); if (X.stage === 'review') render(); });
+  render();
+}
+function hkNext() {
+  const X = S.ui.hk; stopAudio(); recStop();
+  if (X.i + 1 < hkItems(X.ex).length) { X.i++; hkItem(); }
+  else { X.stage = 'review'; X.phase = ''; micOff(); setTimeout(render, 300); render(); }
+}
+
+/* ---------------- submit ---------------- */
+const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => { const v = (Math.random() * 16) | 0; return (c === 'x' ? v : (v & 3) | 8).toString(16); }));
+async function hkSubmit() {
+  const X = S.ui.hk; if (!X || X.sending) return; X.sending = true;
+  const items = hkItems(X.ex); const id = uuid(); const recorded = items.filter((it) => X.blobs[it.n]);
+  const r = { id, uid: 'me', name: S.user?.name || '', email: S.user?.email || '', examId: X.ex.id, title: X.ex.title, level: 100 + X.ex.level, mode: X.mode, answers: {},
+    sections: { speaking: { items: items.length, recorded: recorded.length, max: 100, score: null } }, autoScore: 0, maxScore: 100, essays: [], pending: true, total: null,
+    durationSec: Math.round((Date.now() - X.started) / 1000), createdAtMs: Date.now(), classIds: S.user?.classIds || [], comment: '' };
+  HK.blobs[id] = { ...X.blobs }; HK.urls[id] = { ...X.urls };
+  if (HAS_SB()) {
+    let i = 0;
+    for (const it of recorded) {
+      X.upMsg = hk('uploading', { i: ++i, n: recorded.length }); render();
+      const b = X.blobs[it.n]; const path = `${SB.uid}/${id}/${it.n}.${extOf(b.type)}`;
+      const { error } = await SB.c.storage.from('hskk').upload(path, b, { contentType: b.type || 'audio/webm', upsert: true });
+      if (error) { console.warn(error); X.sending = false; X.upMsg = ''; render(); return toast(errText(error)); }
+      r.answers[it.n] = path;
+    }
+    const row = { id, user_id: SB.uid, name: r.name, email: r.email, exam_id: r.examId, title: r.title, level: r.level, mode: r.mode, answers: r.answers, sections: r.sections,
+      auto_score: 0, max_score: 100, essays: [], pending: true, total: null, duration_sec: r.durationSec, class_ids: r.classIds };
+    const { data, error } = await SB.c.from('results').insert(row).select().single();
+    X.sending = false; X.upMsg = '';
+    if (error) { render(); return toast(errText(error)); }
+    SB.mine.unshift(data); rebuild();
+  } else {
+    recorded.forEach((it) => (r.answers[it.n] = 'local'));
+    S.results.unshift(r); store.set('results', S.results.map((x) => x)); X.sending = false;
+  }
+  X.stage = 'done'; S.ui.hk = null; toast(hk('sent')); go('hskkResult', { id });
+}
+
+/* ---------------- screens ---------------- */
+const lvName = (l) => `${HK_LEVELS[l].zh} · ${hk('lv' + l)}`;
+const partDesc = (p) => `${p.zh} · ${hk(p.kind)}`;
+function hkList() {
+  const u = S.ui.ex; const lv = u.hkLevel || 1; const L = HK_LEVELS[lv];
+  const mine = (S.results || []).filter((r) => r.uid === 'me' && isHskk(r));
+  const total = L.parts.reduce((a, p) => a + p.n, 0);
+  const card = (set) => { const ex = hkBuild(lv, set); const done = mine.filter((r) => r.examId === ex.id); const last = done[0];
+    return `<div class="card exam"><div class="examTop"><span class="setno purple">${set}</span><div class="grow"><b class="zh">${esc(ex.title)}</b>
+      <div class="muted small">${L.parts.map((p) => `${p.zh} ${p.n}`).join(' · ')}</div>
+      <div class="pills">${pill(esc(hk('items', { n: total })), 'grey')}${pill(esc(hk('min', { n: L.minutes })), 'grey')}${pill(esc(hk('prep', { n: Math.round(L.prep / 60) })), 'grey')}${last ? pill(esc(last.pending ? hk('pending') : `${last.total}/100`), last.pending ? 'warn' : 'green') : ''}</div></div></div>
+      <button class="btn primary sm" data-hkstart="${ex.id}">${ic('mic', 15)}${esc(hk('start'))}</button></div>`; };
+  return `<div class="hkHero"><div class="hkHeroIc">${ic('mic', 26)}</div><div><b>${esc(hk('title'))} <span class="zh">汉语水平口语考试</span></b><small>${esc(hk('sub'))}</small></div></div>
+    <div class="hkLvs">${[1, 2, 3].map((l) => `<button class="hkLv ${lv === l ? 'on' : ''}" data-hklv="${l}"><b class="zh">${HK_LEVELS[l].zh}</b><span>${esc(hk('lv' + l))}</span><small>${esc(hk('lvFor' + l))}</small></button>`).join('')}</div>
+    <div class="seg">${['real', 'practice'].map((m) => `<button class="${u.mode === m ? 'on' : ''}" data-em="${m}">${esc(t(m === 'real' ? 'modeReal' : 'modePractice'))}</button>`).join('')}</div>
+    <div class="card"><b>${esc(hk('structure'))} · <span class="zh">HSKK ${L.zh}</span></b>
+      <div class="hkStruct">${L.parts.map((p, i) => `<div><span class="hkNo">${i + 1}</span><div class="grow"><b class="zh">${p.zh}</b> <span class="muted small">${esc(hk(p.kind))}</span></div><span class="muted small">${esc(hk('items', { n: p.n }))}</span></div>`).join('')}</div>
+      <p class="muted small">${esc(hk('prep', { n: Math.round(L.prep / 60) }))} · ${esc(hk('min', { n: L.minutes }))} · ${esc(hk('passLine'))}</p></div>
+    <h3 class="h2">${esc(lvName(lv))}</h3>${Array.from({ length: HK_SETS }, (_, i) => card(i + 1)).join('')}`;
+}
+const itemPrompt = (it, showText) => {
+  let h = '';
+  if (it.emoji) h += `<div class="hkPic" role="img" aria-label="picture">${it.emoji}</div>`;
+  if (showText) h += `<div class="hkText zh">${esc(it.text)}</div>${it.py ? `<div class="hkPy">${esc(it.py)}</div>` : ''}`;
+  return h;
+};
+SCREENS.hskkRoom = function () {
+  const X = S.ui.hk; if (!X) return `<div class="pad">${hkList()}</div>`;
+  const items = hkItems(X.ex); const practice = X.mode === 'practice';
+  const top = `<div class="examTopbar"><button class="iconbtn" data-hkleave aria-label="close">${ic('close', 22)}</button><b class="zh">${esc(X.ex.title)}</b><span class="pill white">${X.stage === 'run' ? `${X.i + 1}/${items.length}` : ''}</span></div>`;
+  if (X.stage === 'prep') {
+    const prepParts = X.ex.parts.filter((p) => p.prep);
+    return `${top}<div class="pad"><div class="hkClock"><small>${esc(hk('prepTitle'))}</small><b id="hkLeft">${hkClock(X.left)}</b><div class="hkTrack"><i id="hkBar" style="width:${100 * X.left / X.ex.prepSec}%"></i></div></div>
+      <p class="muted small">${esc(hk('prepNote'))}</p><p class="betaNote">${ic('mic', 14)} ${esc(hk('micAsk'))}</p>
+      ${prepParts.map((p) => `<div class="part"><b class="zh">${esc(hk('partN', { n: p.no }))} · ${p.zh}</b><small>${esc(hk(p.kind))}</small></div>${p.items.map((it) => `<div class="card"><span class="qno">${it.n}</span>${itemPrompt(it, true)}</div>`).join('')}`).join('')}
+      <button class="btn primary" data-hkgo>${ic('mic', 16)}${esc(hk('skipPrep'))}</button></div>`;
+  }
+  if (X.stage === 'run') {
+    const it = items[X.i]; const part = X.ex.parts.find((p) => p.items.includes(it));
+    const showText = ['question', 'picture', 'read'].includes(it.kind) || (practice && X.script);
+    const status = X.phase === 'listen' ? `<div class="hkStatus listen">${ic('vol', 22)}<b>${esc(hk('listen'))}</b></div>`
+      : X.phase === 'ready' ? `<div class="hkStatus">${ic('clock', 22)}<b>${esc(hk('ready'))}</b><span id="hkLeft">${esc(hk('left', { n: X.left }))}</span></div>`
+      : `<div class="hkStatus rec"><span class="recDot"></span><b>${esc(hk('rec'))}</b><span id="hkLeft">${esc(hk('left', { n: X.left }))}</span><div class="hkTrack"><i id="hkBar" style="width:${100 * X.left / it.rec}%"></i></div></div>`;
+    return `${top}<div class="pad"><div class="part"><b class="zh">${esc(hk('partN', { n: part.no }))} · ${part.zh}</b><small>${esc(hk(part.kind))}</small></div>
+      <div class="hkDots">${part.items.map((x) => `<i class="${x.n < it.n ? 'done' : x.n === it.n ? 'on' : ''}"></i>`).join('')}</div>
+      <div class="card hkCard"><span class="qno">${it.n}</span>${itemPrompt(it, showText)}${status}
+        ${practice && it.audio ? `<div class="row2"><button class="btn line sm" data-hkreplay>${ic('play', 14, true)}${esc(hk('replay'))}</button><button class="btn line sm" data-hkscript>${esc(hk('showScript'))}</button></div>` : ''}
+        ${X.phase === 'rec' ? `<button class="btn primary" data-hknext>${ic('stop', 15, true)}${esc(hk('stopNext'))}</button>` : ''}</div></div>`;
+  }
+  // review before sending
+  return `${top}<div class="pad"><h2 class="h2">${esc(hk('review'))}</h2>
+    ${X.ex.parts.map((p) => `<div class="part"><b class="zh">${esc(hk('partN', { n: p.no }))} · ${p.zh}</b><small>${esc(hk(p.kind))}</small></div>${p.items.map((it) => `<div class="card hkRv"><span class="qno">${it.n}</span>${itemPrompt(it, true)}${X.urls[it.n] ? `<audio controls preload="metadata" src="${X.urls[it.n]}"></audio>` : `<p class="muted small">${esc(hk('notRec'))}</p>`}</div>`).join('')}`).join('')}
+    ${X.upMsg ? `<p class="center muted">${esc(X.upMsg)}</p>` : ''}
+    <div class="row2"><button class="btn line" data-hkredo>${esc(hk('redo'))}</button><button class="btn primary" data-hksubmit ${X.sending ? 'disabled' : ''}>${esc(hk('submit'))}</button></div></div>`;
+};
+SCREENS.hskkResult = function () {
+  const r = S.results.find((x) => x.id === S.params.id); if (!r) return `<div class="pad">${back('exams')}</div>`;
+  const ex = hkGet(r.examId); const teacher = S.role === 'teacher' && (r.uid !== 'me' || !HAS_SB());
+  const sp = r.sections?.speaking || {}; const sc = r.pending ? null : r.total;
+  const src = (n) => { const p = r.answers?.[n]; if (!p) return null; if (HK.urls[r.id]?.[n]) return HK.urls[r.id][n]; if (p === 'local') return ''; return HK.signed[p] || 'load'; };
+  const need = Object.values(r.answers || {}).filter((p) => p && p !== 'local' && !HK.signed[p]);
+  if (need.length && HAS_SB() && !HK.loading) { HK.loading = true; SB.c.storage.from('hskk').createSignedUrls(need, 3600).then(({ data }) => { (data || []).forEach((d) => d.signedUrl && (HK.signed[d.path] = d.signedUrl)); HK.loading = false; if (S.view === 'hskkResult') render(); }); }
+  const audioFor = (n) => { const s = src(n); if (s === null) return `<p class="muted small">${esc(hk('notRec'))}</p>`; if (s === '') return `<p class="muted small">${esc(hk('localOnly'))}</p>`; if (s === 'load') return `<p class="muted small">${esc(hk('loadingAudio'))}</p>`; return `<audio controls preload="metadata" src="${esc(s)}"></audio>`; };
+  return `<div class="pad">${back(S.params.from || 'exams', '')}
+    <div class="resHero"><small class="zh">${esc(r.title)}${r.uid !== 'me' ? ` · ${esc(r.name)}` : ''}</small><b>${sc == null ? '—' : sc}<span> / 100</span></b>
+      <small>${esc(sc == null ? hk('pending') : sc >= 60 ? hk('pass') : hk('fail'))} · ${esc(hk('passLine'))} · ${new Date(r.createdAtMs).toLocaleString()}</small></div>
+    ${r.comment ? `<div class="card"><b>${esc(t('comment'))}</b><p>${esc(r.comment)}</p></div>` : ''}
+    ${teacher ? `<div class="card gradeBox"><b>${esc(hk('grade'))}</b><label class="slab" for="hkScore">${esc(hk('score'))}</label><div class="bar"><input id="hkScore" class="input grow" inputmode="numeric" value="${sc ?? ''}"><button class="btn primary sm" data-hkgrade="${r.id}">${esc(t('save'))}</button></div><input id="hkComment" class="input" placeholder="${esc(hk('comment'))}" value="${esc(r.comment || '')}"></div>` : ''}
+    ${ex ? ex.parts.map((p) => `<div class="part"><b class="zh">${esc(hk('partN', { n: p.no }))} · ${p.zh}</b><small>${esc(hk(p.kind))}</small></div>${p.items.map((it) => `<div class="card hkRv"><span class="qno">${it.n}</span>${itemPrompt(it, true)}
+      <small class="muted">${esc(hk('yours'))}</small>${audioFor(it.n)}${it.sample ? `<div class="expl"><b>${esc(hk('sample'))}:</b> <span class="zh">${esc(it.sample)}</span></div>` : ''}</div>`).join('')}`).join('') : ''}
+    <small class="muted">${sp.recorded ?? ''}/${sp.items ?? ''}</small></div>`;
+};
+TAB_OF.hskkResult = 'exams';
+
+// HSK (written) | HSKK (speaking) switch on the tests tab, and a banner on home
+const _exams = SCREENS.exams;
+SCREENS.exams = function () {
+  const u = S.ui.ex || (S.ui.ex = { level: S.set.targetLevel, mode: 'real' });
+  const sw = `<div class="kindSw">${[['hsk', hk('written'), 'pen'], ['hskk', hk('speaking'), 'mic']].map(([k, l, i]) => `<button class="${(u.kind || 'hsk') === k ? 'on' : ''}" data-hkkind="${k}">${ic(i, 16)}${esc(l)}</button>`).join('')}</div>`;
+  if (u.kind === 'hskk') return `<div class="pad"><h1 class="title">${esc(t('examsTitle'))}</h1>${sw}${hkList()}</div>`;
+  return _exams().replace('</h1>', `</h1>${sw}`);
+};
+const _home = SCREENS.home;
+SCREENS.home = function () {
+  const ban = `<button class="hkBanner" data-hkhome>${ic('mic', 24)}<span class="grow"><b>${esc(hk('banner'))}</b><small>${esc(hk('bannerSub'))}</small></span>${ic('chev', 18)}</button>`;
+  return _home().replace('<h3 class="h2">', `${ban}<h3 class="h2">`);
+};
+const _result = SCREENS.result;
+SCREENS.result = function () { const r = S.results.find((x) => x.id === S.params.id); return r && isHskk(r) ? SCREENS.hskkResult() : _result(); };
+// written-test only lists: keep HSKK sets out of "best score" of the written list (they have their own ids, so nothing to do)
+
+const _go = go;
+go = function (view, params) { if (S.view === 'hskkRoom' && view !== 'hskkRoom') hkCleanup(); return _go(view, params); };
+
+/* ---------------- events ---------------- */
+document.addEventListener('click', async (e) => {
+  const el = e.target.closest('button'); if (!el) return;
+  const d = el.dataset;
+  if (d.hkkind) { S.ui.ex.kind = d.hkkind; return render(true); }
+  if (d.hklv) { S.ui.ex.hkLevel = +d.hklv; return render(); }
+  if (d.hkhome !== undefined) { S.ui.ex = { ...(S.ui.ex || { level: S.set.targetLevel, mode: 'real' }), kind: 'hskk' }; return go('exams'); }
+  if (d.hkstart) { if (!(await micOn())) return; return hkStartExam(d.hkstart, S.ui.ex?.mode || 'real'); }
+  if (!S.ui.hk && !d.hkgrade) return;
+  const X = S.ui.hk;
+  if (d.hkgo !== undefined) return hkRun();
+  if (d.hknext !== undefined) return hkNext();
+  if (d.hkreplay !== undefined) { const it = hkItems(X.ex)[X.i]; recStop(); X.phase = 'listen'; render(); return playLines(it.audio, () => { if (S.ui.hk === X && X.phase === 'listen') { X.phase = 'ready'; X.left = 2; render(); } }); }
+  if (d.hkscript !== undefined) { X.script = !X.script; return render(); }
+  if (d.hkredo !== undefined) return hkStartExam(X.ex.id, X.mode);
+  if (d.hksubmit !== undefined) return hkSubmit();
+  if (d.hkleave !== undefined) return sheet(`<h3>${esc(hk('leave'))}</h3><div class="row2"><button class="btn line" data-act="close">${esc(t('cancel'))}</button><button class="btn primary" data-hkleaveyes>${esc(t('leave'))}</button></div>`);
+  if (d.hkleaveyes !== undefined) { closeSheet(); return go('exams'); }
+  if (d.hkgrade) {
+    const r = S.results.find((x) => x.id === d.hkgrade); const n = Number(document.getElementById('hkScore').value); const comment = document.getElementById('hkComment').value || '';
+    if (!(n >= 0 && n <= 100) || document.getElementById('hkScore').value === '') return toast(hk('score'));
+    const sections = { ...r.sections, speaking: { ...(r.sections?.speaking || {}), score: n } };
+    if (HAS_SB()) {
+      const { error } = await SB.c.from('results').update({ sections, total: n, pending: false, comment, graded_by: SB.uid, graded_at: new Date().toISOString() }).eq('id', r.id);
+      if (error) return toast(errText(error));
+      Object.assign(r, { sections, total: n, pending: false, comment }); loadAll();
+    } else { Object.assign(r, { sections, total: n, pending: false, comment }); store.set('results', S.results); }
+    toast(hk('saved')); return render();
+  }
+});
+// the timer for preparation and recording
+const _render2 = render;
+render = function (reset) {
+  _render2(reset);
+  if (S.view === 'hskkRoom') { clearInterval(HK.timer); HK.timer = setInterval(hkTick, 1000); }
+  document.querySelectorAll('audio').forEach((a) => (a.volume = Math.min(1, Math.max(0, S.set.volume ?? 1))));
+};
 
 </script>
 </body>
