@@ -16,7 +16,7 @@ window.HSK_CONFIG = {
   supabaseUrl: "https://eoinanjbufbcbcdvntvz.supabase.co",
   supabaseKey: "sb_publishable_dTtcjGnI958kv3FwapVujw_osfLrJNK",
   supabaseJsVersion: "2.109.0",
-  socialProviders: ["Google", "Facebook"]   // ปุ่มล็อกอินโซเชียลที่แสดง (เพิ่ม "Apple" ได้ถ้าเปิด Apple ใน Supabase แล้ว)
+  socialProviders: ["Google"]   // ปุ่มล็อกอินโซเชียลที่แสดง (เพิ่ม "Facebook" / "Apple" ได้ถ้าเปิดใน Supabase แล้ว)
 };
 </script>
 <meta name="theme-color" content="#D9534F">
@@ -948,7 +948,7 @@ const fmt = (s) => { s = Math.max(0, Math.floor(s)); return [Math.floor(s / 3600
 const SOCIAL_ON = (p) => { const l = window.HSK_CONFIG && window.HSK_CONFIG.socialProviders; return !Array.isArray(l) || l.includes(p); };
 const social = (apple = true) => { const b = [['Google', 'line', brand.google], ['Facebook', 'fb', brand.fb], ['WeChat', 'wc', brand.wechat]].filter(([p]) => SOCIAL_ON(p));
   return `${apple && SOCIAL_ON('Apple') ? `<button class="btn dark" data-act="social" data-p="Apple">${brand.apple}${esc(t('continueApple'))}</button>` : ''}
-  ${b.length ? `<div class="row${b.length === 3 ? 3 : 2}">${b.map(([p, c, ic2]) => `<button class="btn ${c} sm" data-act="social" data-p="${p}">${ic2}${p}</button>`).join('')}</div>` : ''}`; };
+  ${b.length ? `<div class="${b.length === 1 ? 'one' : 'row' + (b.length === 3 ? 3 : 2)}">${b.map(([p, c, ic2]) => `<button class="btn ${c} sm" data-act="social" data-p="${p}">${ic2}${p}</button>`).join('')}</div>` : ''}`; };
 
 /* ---------------- screens ---------------- */
 const SCREENS = {
